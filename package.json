@@ -1,0 +1,42 @@
+{
+  "name": "gravatic-booster",
+  "version": "1.0.0",
+  "main": "./dist/gravatic-booster.js",
+  "module": "./dist/gravatic-booster.mjs",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "cli": "npx ts-node -r tsconfig-paths/register bin/cli.ts",
+    "check": "tsc && npm run lint",
+    "build": "rollup -c",
+    "lint": "eslint . --ext .ts",
+    "format": "prettier . --write",
+    "docs": "typedoc src/index.ts"
+  },
+  "devDependencies": {
+    "@types/cli-progress": "^3.11.0",
+    "@types/node": "^18.15.5",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
+    "cli-progress": "^3.12.0",
+    "commander": "^10.0.0",
+    "esbuild": "^0.17.19",
+    "eslint": "^8.36.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.6",
+    "rollup": "^3.23.0",
+    "rollup-plugin-dts": "^5.3.0",
+    "rollup-plugin-esbuild": "^5.0.0",
+    "rollup-plugin-polyfill-node": "^0.12.0",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.1.2",
+    "typedoc": "^0.24.7",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "bw-web-api": "^2.0.0",
+    "lru-cache": "^8.0.4",
+    "tslog": "^4.8.2",
+    "typescript-retry-decorator": "^2.2.0"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "rootDir": "./",
+    "paths": {
+      "@/*": [
+        "./src/*",
+        "./bin/*",
+      ]
+    },
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "CommonJS",
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "moduleResolution": "Node",
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src",
+    "bin",
+    "test"
+  ],
+  "exclude": [
+    ".history/**"
+  ]
+}
