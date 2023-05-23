@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "./dist/gravatic-booster.js",
   "module": "./dist/gravatic-booster.mjs",
-  "types": "./dist/index.d.ts",
+  "types": "./dist/gravatic-booster.d.ts",
   "scripts": {
     "cli": "npx ts-node -r tsconfig-paths/register bin/cli.ts",
     "check": "tsc && npm run lint",
