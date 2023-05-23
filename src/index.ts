@@ -14,3 +14,4 @@ export * from "@/models/matchHistory";
 export * from "@/models/profileMapStats";
 export * from "@/models/ranking";
 export * from "@/models/replays";
+export * from "@/utils/logger";

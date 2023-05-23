@@ -31,12 +31,16 @@ export class LocalWindowsClientProvider implements ClientProvider {
 
     let pid;
     try {
-      pid = (await execAsync(`powershell.exe -Command "${getProcessCommand}"`))
-        .toString()
-        .trim();
+      pid = (
+        await execAsync(`powershell.exe -Command "${getProcessCommand}"`)
+      ).stdout.trim();
     } catch (e) {
       throw new StarcraftProcessNotFoundError();
     }
+
+    GravaticBoosterLogger.instance.info(
+      `Found StarCraft process with PID ${pid}`
+    );
 
     let port;
     try {
@@ -48,9 +52,13 @@ export class LocalWindowsClientProvider implements ClientProvider {
         .replace(/\s+/g, " ")
         .trim();
 
-      port = (await execAsync(`powershell.exe -Command "${getPortCommand}"`))
-        .toString()
-        .trim();
+      GravaticBoosterLogger.instance.info(
+        `Using powershell command to get port: ${getPortCommand}`
+      );
+
+      port = (
+        await execAsync(`powershell.exe -Command "${getPortCommand}"`)
+      ).stdout.trim();
     } catch (e) {
       throw new StarcraftAPIPortNotFoundError();
     }

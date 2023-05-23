@@ -62,18 +62,19 @@ export type GatewayLookupProps =
     };
 
 export class GravaticBooster {
-  constructor(private api: ISCApi) {}
+  private constructor(private api: ISCApi) {}
 
-  static async create(): Promise<GravaticBooster> {
-    const api = new SCApiWithCaching(
-      new SCApi(
-        new ResilientBroodWarConnection(
-          await new ContextualWindowsOrWSLClientProvider().provide()
+  static async create(api?: ISCApi): Promise<GravaticBooster> {
+    return new GravaticBooster(
+      api ??
+        new SCApiWithCaching(
+          new SCApi(
+            new ResilientBroodWarConnection(
+              await new ContextualWindowsOrWSLClientProvider().provide()
+            )
+          )
         )
-      )
     );
-
-    return new GravaticBooster(api);
   }
 
   /**

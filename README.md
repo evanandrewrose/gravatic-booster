@@ -41,7 +41,7 @@ npm i --save gravatic-booster
 ## Displaying A Player's Match History For The Current Season:
 
 ```typescript
-const gb = new GravaticBooster();
+const gb = await GravaticBooster.create();
 
 const matches = gb.matchHistory("bob", {
   region: "usw",
@@ -76,7 +76,7 @@ Output:
 ## Determine How Many Players Are Online For Each Gateway
 
 ```typescript
-const gb = new GravaticBooster();
+const gb = await GravaticBooster.create();
 
 const gateways = gb.gateways();
 
@@ -99,7 +99,7 @@ Asia (45): 510
 ## Get Replay URLs For The #1 Ranked Player
 
 ```typescript
-const gb = new GravaticBooster();
+const gb = await GravaticBooster.create();
 
 const playerRanking = await gb.ranking(0);
 const playerAccount = await playerRanking?.minimalAccount();
@@ -131,7 +131,7 @@ The default cache configuration can be found at `src/api/SCApiWithCaching.ts`. I
 you can pass a different api parameter to `GravaticBooster`. For example, if you want to disable caching for the `matchHistory` endpoint:
 
 ```typescript
-const gb = new GravaticBooster(
+const gb = await GravaticBooster.create(
   new SCApiWithCaching(
     new SCApi(
       new ResilientBroodWarConnection(
@@ -167,7 +167,7 @@ This library provides a {@link WSLHostnameClientProvider} that can be passed to 
 with the port provided (or 57421 otherwise) to find your Windows SCR web server instance.
 
 ```typescript
-const gb = new GravaticBooster(
+const gb = await GravaticBooster.create(
   new SCApiWithCaching(
     new SCApi(
       new ResilientBroodWarConnection(
@@ -183,7 +183,7 @@ const gb = new GravaticBooster(
 Alternatively, if you want your code to work on Windows as well as WSL:
 
 ```typescript
-const gb = new GravaticBooster(
+const gb = await GravaticBooster.create(
   new SCApiWithCaching(
     new SCApi(
       new ResilientBroodWarConnection(
@@ -196,7 +196,7 @@ const gb = new GravaticBooster(
 );
 
 // note: this is the default, so you can omit provider unless you're changing the port
-const gb = new GravaticBooster(provider);
+const gb = await GravaticBooster.create(provider);
 ```
 
 # CLI Tool
