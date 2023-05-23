@@ -37,12 +37,16 @@ export class LocalWindowsClientProvider implements ClientProvider {
 
     let port;
     try {
-      port = `(Get-NetTCPConnection -OwningProcess ${pid}
+      const getPortCommand = `(Get-NetTCPConnection -OwningProcess ${pid}
          | Where-Object {$_.State -eq 'Listen'}
          | Sort-Object -Property LocalPort
          | Select-Object -First 1
          ).LocalPort`
         .replace(/\s+/g, " ")
+        .trim();
+
+      port = execSync(`powershell.exe -Command "${getPortCommand}"`)
+        .toString()
         .trim();
     } catch (e) {
       throw new StarcraftAPIPortNotFoundError();
