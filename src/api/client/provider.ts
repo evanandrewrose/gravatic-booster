@@ -3,7 +3,10 @@ import {
   StarcraftProcessNotFoundError,
 } from "@/errors";
 import { GravaticBoosterLogger } from "@/utils/logger";
-import { execSync } from "node:child_process";
+import { exec } from "child_process";
+import util from "util";
+
+const execAsync = util.promisify(exec);
 
 type hostname = string;
 
@@ -11,7 +14,7 @@ type hostname = string;
  * Provides the hostname of the SC Remastered API
  */
 export interface ClientProvider {
-  provide(): hostname;
+  provide(): Promise<hostname>;
 }
 
 /**
@@ -22,13 +25,13 @@ export interface ClientProvider {
  * @throws StarcraftAPIPortNotFoundError if the StarCraft API port is not found
  */
 export class LocalWindowsClientProvider implements ClientProvider {
-  provide(): hostname {
+  async provide(): Promise<hostname> {
     const getProcessCommand =
       "Get-Process -Name StarCraft | Select-Object -ExpandProperty Id";
 
     let pid;
     try {
-      pid = execSync(`powershell.exe -Command "${getProcessCommand}"`)
+      pid = (await execAsync(`powershell.exe -Command "${getProcessCommand}"`))
         .toString()
         .trim();
     } catch (e) {
@@ -45,7 +48,7 @@ export class LocalWindowsClientProvider implements ClientProvider {
         .replace(/\s+/g, " ")
         .trim();
 
-      port = execSync(`powershell.exe -Command "${getPortCommand}"`)
+      port = (await execAsync(`powershell.exe -Command "${getPortCommand}"`))
         .toString()
         .trim();
     } catch (e) {
@@ -77,8 +80,8 @@ export class LocalWindowsClientProvider implements ClientProvider {
 export class StaticHostnameClientProvider implements ClientProvider {
   constructor(private hostname: hostname) {}
 
-  provide(): hostname {
-    return this.hostname;
+  provide(): Promise<hostname> {
+    return Promise.resolve(this.hostname);
   }
 }
 
@@ -101,10 +104,10 @@ export class StaticHostnameClientProvider implements ClientProvider {
 export class WSLHostnameClientProvider implements ClientProvider {
   constructor(private port: number = 57421) {}
 
-  provide(): hostname {
+  async provide(): Promise<hostname> {
     // determine windows host ip address
-    const stdout = execSync(
-      "cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2"
+    const stdout = (
+      await execAsync("cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2")
     )
       .toString()
       .trim();
@@ -146,7 +149,7 @@ export class ContextualWindowsOrWSLClientProvider implements ClientProvider {
     }
   }
 
-  provide(): hostname {
-    return this.delegate.provide();
+  async provide(): Promise<hostname> {
+    return await this.delegate.provide();
   }
 }

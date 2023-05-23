@@ -62,15 +62,19 @@ export type GatewayLookupProps =
     };
 
 export class GravaticBooster {
-  constructor(
-    private api: ISCApi = new SCApiWithCaching(
+  constructor(private api: ISCApi) {}
+
+  static async create(): Promise<GravaticBooster> {
+    const api = new SCApiWithCaching(
       new SCApi(
         new ResilientBroodWarConnection(
-          new ContextualWindowsOrWSLClientProvider().provide()
+          await new ContextualWindowsOrWSLClientProvider().provide()
         )
       )
-    )
-  ) {}
+    );
+
+    return new GravaticBooster(api);
+  }
 
   /**
    * Returns all known gateways. This is just a static list of gateways, since they're expected to be

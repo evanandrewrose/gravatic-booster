@@ -449,7 +449,7 @@ const matchHistory = async (
 const main = async () => {
   program.name("gravatic-booster").version("0.0.1");
 
-  const gb = new GravaticBooster();
+  const gb = await GravaticBooster.create();
 
   program.addOption(
     new Option("-l, --log-level <level>", "set log level").choices(LogLevels)
