@@ -3,7 +3,5 @@
 !README.md
 !dist/gravatic-booster.d.ts
 !dist/gravatic-booster.js
-!dist/gravatic-booster.js.map
 !dist/gravatic-booster.mjs
-!dist/gravatic-booster.mjs.map
 !package.json
