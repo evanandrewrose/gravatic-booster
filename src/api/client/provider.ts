@@ -116,9 +116,7 @@ export class WSLHostnameClientProvider implements ClientProvider {
     // determine windows host ip address
     const stdout = (
       await execAsync("cat /etc/resolv.conf | grep nameserver | cut -d' ' -f 2")
-    )
-      .toString()
-      .trim();
+    ).stdout.trim();
 
     if (!stdout.match(/\d+\.\d+\.\d+\.\d+/)) {
       throw new Error(
