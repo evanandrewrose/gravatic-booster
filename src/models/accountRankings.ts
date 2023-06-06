@@ -1,4 +1,3 @@
-import { UnexpectedAPIResponseError } from "@/errors";
 import { Ranking } from "@/models/ranking";
 
 export class AccountRankings {
@@ -18,7 +17,7 @@ export class AccountRankings {
    *
    * @returns The ranking for the originally requested toon/gateway combination.
    */
-  get requestedRanking(): Ranking {
+  get requestedRanking(): Ranking | null {
     const result = this.rankings.find(
       (ranking) =>
         ranking.toon === this.requestedToon &&
@@ -26,10 +25,7 @@ export class AccountRankings {
     );
 
     if (result === undefined) {
-      // shouldn't ever happen
-      throw new UnexpectedAPIResponseError(
-        "Requested ranking not found, yet it returned a set of rankings?"
-      );
+      return null; // this happens if the player is unranked on the given profile
     }
 
     return result;

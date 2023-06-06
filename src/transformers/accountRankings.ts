@@ -9,7 +9,11 @@ export const accountRankingsFromRankingByToonResponse = (
   requestedToon: string,
   requestedGatewayId: number
 ): AccountRankings | null => {
-  if (!("aurora_id" in response) || !response.aurora_id) {
+  if (
+    !("aurora_id" in response) ||
+    !response.aurora_id ||
+    response.toons.length === 0
+  ) {
     return null;
   }
 
