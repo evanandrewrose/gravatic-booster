@@ -1,4 +1,5 @@
 #!/usr/bin/env ts-node
+import { EntityNotFoundError } from "@/errors";
 import {
   createDirectoryUnlessExists,
   downloadIntoDirectory,
@@ -108,7 +109,14 @@ const dumpAllReplays = async (
         leaderboard.seasonId
       );
 
-      const toonRanking = await profile.ranking(leaderboard.id);
+      let toonRanking;
+      try {
+        toonRanking = await profile.ranking(leaderboard.id);
+      } catch (e) {
+        if (!(e instanceof EntityNotFoundError)) {
+          throw e;
+        }
+      }
 
       if (!toonRanking) {
         continue; // no ranking for this season
