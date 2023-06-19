@@ -6,11 +6,7 @@ import { Retryable } from "typescript-retry-decorator";
  * Logic for retrying requests to the Brood War API.
  */
 export class ResilientBroodWarConnection implements IBroodWarConnection {
-  private server: string;
-
-  constructor(server: string) {
-    this.server = server;
-  }
+  constructor(private decoratedConnection: IBroodWarConnection) {}
 
   @Retryable({
     maxAttempts: 3,
@@ -18,13 +14,8 @@ export class ResilientBroodWarConnection implements IBroodWarConnection {
     value: [RetryableInternalServerError as any],
   })
   async fetch(path: BroodWarApiPath): Promise<string> {
-    const response = await fetch(`${this.server}/${path}`, {
-      headers: {
-        Accept: "application/json",
-      },
-    });
+    const text = await this.decoratedConnection.fetch(path);
 
-    const text = await response.text();
     const textLower = text.toLowerCase();
 
     // the api sometimes returns 400 status but with some error text, below are the known

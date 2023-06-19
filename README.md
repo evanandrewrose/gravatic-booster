@@ -1,12 +1,20 @@
 # Gravatic Booster 🛸
 
-This package is an unofficial wrapper for the brood war API. It provides a caching layer, a simple API, types, and helper methods to connect the various APIs. It converts paginated APIs (leaderboards and match histories) to [asynchronous generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator) for efficient and responsive computation during iteration. It also consolidates redundant and complex nested structures.
+This package is an unofficial wrapper for the brood war API. It provides a
+caching layer, a simple API, types, and helper methods to connect the various
+APIs. It converts paginated APIs (leaderboards and match histories) to
+[asynchronous generators](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator)
+for efficient and responsive computation during iteration. It also consolidates
+redundant and complex nested structures.
 
-It depends on [bw-web-api](https://github.com/evanandrewrose/bw-web-api) which is a simple type wrapper for the same API.
+It depends on [bw-web-api](https://github.com/evanandrewrose/bw-web-api) which
+is a simple type wrapper for the same API.
 
-Read [the API docs for this library here](https://evanandrewrose.github.io/gravatic-booster/classes/GravaticBooster.html).
+Read
+[the API docs for this library here](https://evanandrewrose.github.io/gravatic-booster/classes/GravaticBooster.html).
 
-Also, see the [verbiage](#verbiage) and [notes](#notes) sections as they provide context for the APIs presented.
+Also, see the [verbiage](#verbiage) and [notes](#notes) sections as they provide
+context for the APIs presented.
 
 # Installation
 
@@ -17,21 +25,30 @@ npm i --save gravatic-booster
 # Verbiage
 
 - **Account**: A battle.net account, which can have many profiles
-- **Profile**: An in-game profile with its own win/loss record, match history, etc
+- **Profile**: An in-game profile with its own win/loss record, match history,
+  etc
 - **Toon**: An in-game id (the id you see in chat channels, in-game, etc.)
-- **Bucket**: A term used by the API, corresponds to rank (s, a, b, etc) in the SCR API
+- **Bucket**: A term used by the API, corresponds to rank (s, a, b, etc) in the
+  SCR API
 
 # Notes
 
-- You cannot query by account information (e.g., battlenet id), only by profile information (in-game name and gateway). However, querying by profile does return account information, along with profile-specific data.
-- There are some places where we make the assumption that ladder matches are always 1v1, but it's clear that the original API is future-proofed for 2v2 integration.
-- There are three ways to see game history through the battle.net API. They have different structures and different usecases. They've been mapped to the following `GravaticBooster` APIs:
-  1. `GravaticBooster::fullAccount::recent25Games`
-     -- last 25 games the user played, including ums and everything else
-  1. `GravaticBooster::fullAccount::recent25CompetitiveGames`
-     -- recent 25 games with other humans that aren't ums, roughly your "competitive" history, includes ladder as well
-  1. `GravaticBooster::matchHistory`
-     -- ladder history since the user's profile was created, paginated and accesible by season
+- You cannot query by account information (e.g., battlenet id), only by profile
+  information (in-game name and gateway). However, querying by profile does
+  return account information, along with profile-specific data.
+- There are some places where we make the assumption that ladder matches are
+  always 1v1, but it's clear that the original API is future-proofed for 2v2
+  integration.
+- There are three ways to see game history through the battle.net API. They have
+  different structures and different usecases. They've been mapped to the
+  following `GravaticBooster` APIs:
+  1. `GravaticBooster::fullAccount::recent25Games` -- last 25 games the user
+     played, including ums and everything else
+  1. `GravaticBooster::fullAccount::recent25CompetitiveGames` -- recent 25 games
+     with other humans that aren't ums, roughly your "competitive" history,
+     includes ladder as well
+  1. `GravaticBooster::matchHistory` -- ladder history since the user's profile
+     was created, paginated and accesible by season
 - Complexity is mostly in the `transformers` directory
 - Uses [tslog](https://tslog.js.org/) for logging.
 - Uses [lru-cache](https://www.npmjs.com/package/lru-cache) for caching.
@@ -53,13 +70,17 @@ for await (const match of matches) {
   const pointsFormatted = points && points > 0 ? `+${points}` : `${points}`;
 
   console.log(
-    `[${timestamp.toLocaleString()}] (as ${thisPlayer?.race.padEnd(
-      7,
-      " "
-    )}) ${thisPlayer?.result.padEnd(4, " ")} (${pointsFormatted.padEnd(
-      3,
-      " "
-    )}) vs ${opponent?.toon} (${opponent?.race})`
+    `[${timestamp.toLocaleString()}] (as ${
+      thisPlayer?.race.padEnd(
+        7,
+        " ",
+      )
+    }) ${thisPlayer?.result.padEnd(4, " ")} (${
+      pointsFormatted.padEnd(
+        3,
+        " ",
+      )
+    }) vs ${opponent?.toon} (${opponent?.race})`,
   );
 }
 ```
@@ -127,29 +148,35 @@ See: https://tslog.js.org/
 
 ## Caching
 
-The default cache configuration can be found at `src/api/SCApiWithCaching.ts`. It should provide reasonable defaults. If you want to customize it,
-you can pass a different api parameter to `GravaticBooster`. For example, if you want to disable caching for the `matchHistory` endpoint:
+The default cache configuration can be found at `src/api/SCApiWithCaching.ts`.
+It should provide reasonable defaults. If you want to customize it, you can pass
+a different api parameter to `GravaticBooster`. For example, if you want to
+disable caching for the `matchHistory` endpoint:
 
 ```typescript
 const gb = await GravaticBooster.create(
   new SCApiWithCaching(
     new SCApi(
       new ResilientBroodWarConnection(
-        new ContextualWindowsOrWSLClientProvider().provide()
-      )
+        new BroodWarConnection(
+          await new ContextualWindowsOrWSLClientProvider().provide(),
+        ),
+      ),
     ),
     {
       ...defaultCacheConfig,
       matchHistory: null,
-    }
-  )
+    },
+  ),
 );
 ```
 
 ## Usage With WSL
 
-If you're working on WSL, you probably want to be able to access the StarCraft web api from your Linux distribution. The StarCraft
-web API binds to loopback, so you have to proxy the port and bind to 0.0.0.0. Here's a powershell one-liner that will do it for you (and binds to 57421):
+If you're working on WSL, you probably want to be able to access the StarCraft
+web api from your Linux distribution. The StarCraft web API binds to loopback,
+so you have to proxy the port and bind to 0.0.0.0. Here's a powershell one-liner
+that will do it for you (and binds to 57421):
 
 (as administrator)
 
@@ -163,8 +190,10 @@ You may also have to allow inbound connections from WSL to Windows:
 New-NetFirewallRule -DisplayName "WSL" -Direction Inbound -InterfaceAlias "vEthernet (WSL)" -Action Allow
 ```
 
-This library provides a {@link WSLHostnameClientProvider} that can be passed to {@link GravaticBooster} during construction, which will use /etc/resolv.conf in combination
-with the port provided (or 57421 otherwise) to find your Windows SCR web server instance.
+This library provides a {@link WSLHostnameClientProvider} that can be passed to
+{@link GravaticBooster} during construction, which will use /etc/resolv.conf in
+combination with the port provided (or 57421 otherwise) to find your Windows SCR
+web server instance.
 
 ```typescript
 const gb = await GravaticBooster.create(
@@ -172,11 +201,11 @@ const gb = await GravaticBooster.create(
     new SCApi(
       new ResilientBroodWarConnection(
         new WSLHostnameClientProvider(
-          57421 /* or whatever port you prefer */
-        ).provide()
-      )
-    )
-  )
+          57421, /* or whatever port you prefer */
+        ).provide(),
+      ),
+    ),
+  ),
 );
 ```
 
@@ -188,11 +217,11 @@ const gb = await GravaticBooster.create(
     new SCApi(
       new ResilientBroodWarConnection(
         new ContextualWindowsOrWSLClientProvider(
-          57421 /* or whatever port you prefer */
-        ).provide()
-      )
-    )
-  )
+          57421, /* or whatever port you prefer */
+        ).provide(),
+      ),
+    ),
+  ),
 );
 
 // note: this is the default, so you can omit provider unless you're changing the port
@@ -201,11 +230,13 @@ const gb = await GravaticBooster.create(provider);
 
 # CLI Tool
 
-This package includes a CLI tool for exploring the ladder. It's not distributed with the library, but runnable if you have this repo locally.
+This package includes a CLI tool for exploring the ladder. It's not distributed
+with the library, but runnable if you have this repo locally.
 
 ## Running the CLI
 
-The CLI tool can only be run if you have this repository's sources downloaded. It's not distributed with the library itself.
+The CLI tool can only be run if you have this repository's sources downloaded.
+It's not distributed with the library itself.
 
 ```sh
 npm run cli -- --help

@@ -41,7 +41,7 @@ import { profileMapStatsFromResponse } from "@/transformers/profileMapStats";
 import { rankingsFromLeaderboardEntity } from "@/transformers/rankings";
 import { replaysFromBwApiResponse } from "@/transformers/replay";
 import { GravaticBoosterLogger } from "@/utils/logger";
-import { ISCApi, SCApi } from "bw-web-api";
+import { BroodWarConnection, ISCApi, SCApi } from "bw-web-api";
 
 export type LeaderboardLookupProps =
   | {
@@ -70,7 +70,9 @@ export class GravaticBooster {
         new SCApiWithCaching(
           new SCApi(
             new ResilientBroodWarConnection(
-              await new ContextualWindowsOrWSLClientProvider().provide()
+              new BroodWarConnection(
+                await new ContextualWindowsOrWSLClientProvider().provide()
+              )
             )
           )
         )
