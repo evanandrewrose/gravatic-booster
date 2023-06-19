@@ -1,5 +1,6 @@
 export * from "@/api/client/provider";
 export * from "@/api/connection/ResilientBroodWarConnection";
+export * from "@/api/SCApiWithCaching";
 export * from "@/consts";
 export * from "@/errors";
 export * from "@/main";
