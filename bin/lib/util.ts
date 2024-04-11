@@ -2,7 +2,11 @@ import { Match } from "@/models/matchHistory";
 import { access, constants, mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 
-export const formatDate = (date: Date) => {
+export const formatDate = (date: Date | null) => {
+  if (!date) {
+    return "unknown";
+  }
+
   const year = date.getFullYear();
   const month = (date.getMonth() + 1).toString().padStart(2, "0");
   const day = date.getDate().toString().padStart(2, "0");
@@ -13,7 +17,7 @@ export const formatDate = (date: Date) => {
   return `${year}-${month}-${day}@${hour}${minute}${second}`;
 };
 
-export const formatReplayName = (date: Date, match: Match) => {
+export const formatReplayName = (date: Date | null, match: Match) => {
   const [p1, p2] = match.players;
   const p1Race = p1.race.toLowerCase();
   const p2Race = p2.race.toLowerCase();

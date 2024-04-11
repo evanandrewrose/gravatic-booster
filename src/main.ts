@@ -549,11 +549,11 @@ export class GravaticBooster {
 
     if (!ranking) {
       throw new EntityNotFoundError(
-        `No ranking could be found with properties ${{
+        `No ranking could be found with properties ${JSON.stringify({
           toon,
           gatewayId,
           leaderboardId: leaderboard.id,
-        }}`
+        })}`
       );
     }
 
@@ -588,7 +588,7 @@ export class GravaticBooster {
       // pages are sorted by the api, but the matches within a given page are unsorted. almost always, we want
       // the return matches in reverse chronological order, so we'll sort them here to prevent the caller from having
       // to drain the generator before sorting
-      matches.sort((a, b) => b.timestamp.valueOf() - a.timestamp.valueOf());
+      matches.sort((a, b) => b.gameId - a.gameId);
 
       for (const match of matches) {
         if (seenMatchIds.has(match.id)) {
@@ -597,12 +597,13 @@ export class GravaticBooster {
 
         seenMatchIds.add(match.id);
         yield match;
+
+        if (limit !== undefined && seenMatchIds.size >= limit) { // we've collected the number of matches requested
+          return;
+        }
       }
 
-      if (
-        matchHistoryResponse.length === 0 || // completely empty page returned
-        (limit !== undefined && seenMatchIds.size >= limit) // we've collected the number of matches requested
-      ) {
+      if (matchHistoryResponse.length === 0) { // completely empty page returned
         return;
       }
     }

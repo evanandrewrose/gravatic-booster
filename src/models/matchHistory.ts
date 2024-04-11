@@ -55,7 +55,7 @@ export class Match {
     private gb: GravaticBooster,
     private requestedToon: string,
     private requestedGatewayId: GatewayId,
-    public timestamp: Date,
+    public timestamp: Date | null,
     public closedSlots: number,
     public flags: string,
     public gameSpeed: GameSpeed,
@@ -64,7 +64,8 @@ export class Match {
     public map: MatchMap,
     public id: string,
     public name: string,
-    public players: MatchPlayer[]
+    public players: MatchPlayer[],
+    public gameId: number // as opposed to match id, this is an incrementing value unique to the game
   ) {}
 
   get replays() {

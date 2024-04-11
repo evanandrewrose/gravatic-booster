@@ -255,7 +255,7 @@ const matchResponseToMatch = (
     gb,
     requestedToon,
     requestedGatewayId,
-    new Date(parseInt(matchInfo.match_created) * 1000),
+    (matchInfo.match_created != String(2^64 - 1)) ? new Date(parseInt(matchInfo.match_created) * 1000) : null,
     parseInt(gameInfo.attributes.closed_slots),
     gameInfo.attributes.flags,
     gameSpeedFromGameSpeedIdString(gameInfo.attributes.game_speed),
@@ -273,7 +273,8 @@ const matchResponseToMatch = (
     ),
     matchId,
     gameInfo.name,
-    players
+    players,
+    parseInt(gameInfo.id)
   );
 };
 
