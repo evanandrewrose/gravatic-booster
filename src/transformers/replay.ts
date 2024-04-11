@@ -7,7 +7,7 @@ export const replaysFromBwApiResponse = (
   const replays = response.replays
     .map((replay) => {
       if ("url" in replay) {
-        return new Replay(replay.url, new Date(replay.create_time));
+        return new Replay(replay.url, new Date(replay.create_time * 1000));
       }
 
       return undefined;
