@@ -443,7 +443,7 @@ const matchHistory = async (
     const pointsFormatted = points && points > 0 ? `+${points}` : `${points}`;
 
     console.log(
-      `[${timestamp.toLocaleString()}] (as ${thisPlayer?.race.padEnd(
+      `[${timestamp?.toLocaleString()}] (as ${thisPlayer?.race.padEnd(
         7,
         " "
       )}) ${thisPlayer?.result.padEnd(4, " ")} (${pointsFormatted.padEnd(
