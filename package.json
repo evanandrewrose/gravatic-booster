@@ -1,6 +1,6 @@
 {
   "name": "gravatic-booster",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "./dist/gravatic-booster.js",
   "module": "./dist/gravatic-booster.mjs",
   "types": "./dist/gravatic-booster.d.ts",
