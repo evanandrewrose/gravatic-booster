@@ -42,6 +42,8 @@ import { rankingsFromLeaderboardEntity } from "@/transformers/rankings";
 import { replaysFromBwApiResponse } from "@/transformers/replay";
 import { GravaticBoosterLogger } from "@/utils/logger";
 import { BroodWarConnection, ISCApi, SCApi } from "bw-web-api";
+import { PlayerSearchResult } from "./models/playerSearchResult";
+import { playerSearchResultFromBwApiResponse } from "./transformers/playerSearchResult";
 
 export type LeaderboardLookupProps =
   | {
@@ -619,4 +621,7 @@ export class GravaticBooster {
     replaysFromBwApiResponse(
       await this.api.matchMakerGameInfoPlayerInfo(matchId)
     );
+
+  playerSearch = async (search: string): Promise<PlayerSearchResult[]> =>
+    playerSearchResultFromBwApiResponse(await this.api.leaderboardNameSearch((await this.leaderboard({})).id, search));
 }

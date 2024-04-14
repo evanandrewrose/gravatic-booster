@@ -298,13 +298,14 @@ export class SCApiWithCaching implements ISCApi {
     );
 
   leaderboardNameSearch = async (
+    leaderboard: number,
     toon: string
   ): Promise<LeaderboardNameSearchResponse> =>
     this.cacheOr(
       "leaderboardNameSearch",
       this.leaderboardNameSearchCache,
       toon,
-      () => this.api.leaderboardNameSearch(toon)
+      () => this.api.leaderboardNameSearch(leaderboard, toon)
     );
 
   leaderboardRankByToon = async (

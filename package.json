@@ -1,6 +1,6 @@
 {
   "name": "gravatic-booster",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "main": "./dist/gravatic-booster.js",
   "module": "./dist/gravatic-booster.mjs",
   "types": "./dist/gravatic-booster.d.ts",
@@ -36,7 +36,7 @@
     "typescript": "^5.0.4"
   },
   "dependencies": {
-    "bw-web-api": "^2.0.0",
+    "bw-web-api": "^3.0.1",
     "lru-cache": "^8.0.4",
     "tslog": "^4.8.2",
     "typescript-retry-decorator": "^2.2.0"

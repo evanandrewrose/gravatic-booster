@@ -1,6 +1,12 @@
 #!/usr/bin/env ts-node
 import { EntityNotFoundError } from "@/errors";
 import {
+  SCApiWithCaching,
+  ResilientBroodWarConnection,
+  ContextualWindowsOrWSLClientProvider,
+  StaticHostnameClientProvider,
+} from "@/index";
+import {
   createDirectoryUnlessExists,
   downloadIntoDirectory,
   fileExists,
@@ -9,6 +15,7 @@ import {
 import { GravaticBooster } from "@/main";
 import { GatewayId, GlobalGatewayId } from "@/models/gateway";
 import { GravaticBoosterLogger, LogLevels } from "@/utils/logger";
+import { SCApi, BroodWarConnection } from "bw-web-api";
 import progress from "cli-progress";
 import { Option, program } from "commander";
 import path from "path";
@@ -424,17 +431,27 @@ const displayRankings = async (gb: GravaticBooster) => {
   }
 };
 
+const playerSearch = async (
+  gb: GravaticBooster,
+  toon: string
+) => {
+  console.table(await gb.playerSearch(toon));
+}
+
 const matchHistory = async (
   gb: GravaticBooster,
   toon: string,
-  gatweayId: GatewayId
+  gatweayId: GatewayId,
+  limit = 10
 ) => {
+  console.log(JSON.stringify({ toon, gatweayId, limit }));
   const matches = gb.matchHistory(
     toon,
     {
       gateway: gatweayId,
     },
-    {} // default leaderboard, global 1v1 for the current season
+    {}, // default leaderboard, global 1v1 for the current season
+    limit
   );
 
   for await (const match of matches) {
@@ -457,7 +474,19 @@ const matchHistory = async (
 const main = async () => {
   program.name("gravatic-booster").version("0.0.1");
 
-  const gb = await GravaticBooster.create();
+  const gb = await GravaticBooster.create(
+    new SCApiWithCaching(
+      new SCApi(
+        new ResilientBroodWarConnection(
+          new BroodWarConnection(
+            await new StaticHostnameClientProvider(
+              "https://scpx.cwal.gg:57421"
+            ).provide()
+          )
+        )
+      )
+    )
+  );
 
   program.addOption(
     new Option("-l, --log-level <level>", "set log level").choices(LogLevels)
@@ -525,8 +554,17 @@ const main = async () => {
     .description("display match history for a player")
     .argument("<toon>", "Player toon")
     .argument("<gateway>", "Gateway id")
-    .action(async (toon, gateway) => {
-      await matchHistory(gb, toon, parseInt(gateway) as GatewayId);
+    .addOption(new Option("-l, --limit <number>", "limit the number of results").default(10))
+    .action(async (toon, gateway, limit) => {
+      await matchHistory(gb, toon, parseInt(gateway) as GatewayId, Number.parseInt(limit.limit));
+    });
+
+  program
+    .command("player-search")
+    .description("search for a player")
+    .argument("<toon>", "Player toon")
+    .action(async (toon) => {
+      await playerSearch(gb, toon);
     });
 
   program
