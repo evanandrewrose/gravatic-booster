@@ -70,17 +70,13 @@ for await (const match of matches) {
   const pointsFormatted = points && points > 0 ? `+${points}` : `${points}`;
 
   console.log(
-    `[${timestamp.toLocaleString()}] (as ${
-      thisPlayer?.race.padEnd(
-        7,
-        " ",
-      )
-    }) ${thisPlayer?.result.padEnd(4, " ")} (${
-      pointsFormatted.padEnd(
-        3,
-        " ",
-      )
-    }) vs ${opponent?.toon} (${opponent?.race})`,
+    `[${timestamp.toLocaleString()}] (as ${thisPlayer?.race.padEnd(
+      7,
+      " "
+    )}) ${thisPlayer?.result.padEnd(4, " ")} (${pointsFormatted.padEnd(
+      3,
+      " "
+    )}) vs ${opponent?.toon} (${opponent?.race})`
   );
 }
 ```
@@ -159,15 +155,15 @@ const gb = await GravaticBooster.create(
     new SCApi(
       new ResilientBroodWarConnection(
         new BroodWarConnection(
-          await new ContextualWindowsOrWSLClientProvider().provide(),
-        ),
-      ),
+          await new ContextualWindowsOrWSLClientProvider().provide()
+        )
+      )
     ),
     {
       ...defaultCacheConfig,
       matchHistory: null,
-    },
-  ),
+    }
+  )
 );
 ```
 
@@ -201,11 +197,11 @@ const gb = await GravaticBooster.create(
     new SCApi(
       new ResilientBroodWarConnection(
         new WSLHostnameClientProvider(
-          57421, /* or whatever port you prefer */
-        ).provide(),
-      ),
-    ),
-  ),
+          57421 /* or whatever port you prefer */
+        ).provide()
+      )
+    )
+  )
 );
 ```
 
@@ -217,11 +213,11 @@ const gb = await GravaticBooster.create(
     new SCApi(
       new ResilientBroodWarConnection(
         new ContextualWindowsOrWSLClientProvider(
-          57421, /* or whatever port you prefer */
-        ).provide(),
-      ),
-    ),
-  ),
+          57421 /* or whatever port you prefer */
+        ).provide()
+      )
+    )
+  )
 );
 
 // note: this is the default, so you can omit provider unless you're changing the port

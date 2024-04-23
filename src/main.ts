@@ -600,12 +600,14 @@ export class GravaticBooster {
         seenMatchIds.add(match.id);
         yield match;
 
-        if (limit !== undefined && seenMatchIds.size >= limit) { // we've collected the number of matches requested
+        if (limit !== undefined && seenMatchIds.size >= limit) {
+          // we've collected the number of matches requested
           return;
         }
       }
 
-      if (matchHistoryResponse.length === 0) { // completely empty page returned
+      if (matchHistoryResponse.length === 0) {
+        // completely empty page returned
         return;
       }
     }
@@ -623,5 +625,12 @@ export class GravaticBooster {
     );
 
   playerSearch = async (search: string): Promise<PlayerSearchResult[]> =>
-    playerSearchResultFromBwApiResponse(await this.api.leaderboardNameSearch((await this.leaderboard({})).id, search));
+    playerSearchResultFromBwApiResponse(
+      await this.api.leaderboardNameSearch(
+        (
+          await this.leaderboard({})
+        ).id,
+        search
+      )
+    );
 }

@@ -257,7 +257,9 @@ const matchResponseToMatch = (
     requestedGatewayId,
     // blizzard bug, sometimes the match created time is 18446744073709551615, which is the max value of a 64-bit unsigned integer
     // indicating some kind of error. on repeated requests, the value is sometimes correct
-    matchInfo.match_created !== '18446744073709551615' ? new Date(parseInt(matchInfo.match_created) * 1000) : null,
+    matchInfo.match_created !== "18446744073709551615"
+      ? new Date(parseInt(matchInfo.match_created) * 1000)
+      : null,
     parseInt(gameInfo.attributes.closed_slots),
     gameInfo.attributes.flags,
     gameSpeedFromGameSpeedIdString(gameInfo.attributes.game_speed),

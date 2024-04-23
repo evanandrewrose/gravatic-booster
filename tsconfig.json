@@ -2,18 +2,12 @@
   "compilerOptions": {
     "rootDir": "./",
     "paths": {
-      "@/*": [
-        "./src/*",
-        "./bin/*",
-      ]
+      "@/*": ["./src/*", "./bin/*"]
     },
     "target": "ESNext",
     "useDefineForClassFields": true,
     "module": "CommonJS",
-    "lib": [
-      "ESNext",
-      "DOM"
-    ],
+    "lib": ["ESNext", "DOM"],
     "moduleResolution": "Node",
     "strict": true,
     "sourceMap": true,
@@ -26,16 +20,8 @@
     "noUnusedParameters": false,
     "noImplicitReturns": true,
     "forceConsistentCasingInFileNames": true,
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "include": [
-    "src",
-    "bin",
-    "test"
-  ],
-  "exclude": [
-    ".history/**"
-  ]
+  "include": ["src", "bin", "test"],
+  "exclude": [".history/**"]
 }

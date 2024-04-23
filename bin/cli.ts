@@ -3,7 +3,6 @@ import { EntityNotFoundError } from "@/errors";
 import {
   SCApiWithCaching,
   ResilientBroodWarConnection,
-  ContextualWindowsOrWSLClientProvider,
   StaticHostnameClientProvider,
 } from "@/index";
 import {
@@ -431,12 +430,9 @@ const displayRankings = async (gb: GravaticBooster) => {
   }
 };
 
-const playerSearch = async (
-  gb: GravaticBooster,
-  toon: string
-) => {
+const playerSearch = async (gb: GravaticBooster, toon: string) => {
   console.table(await gb.playerSearch(toon));
-}
+};
 
 const matchHistory = async (
   gb: GravaticBooster,
@@ -554,9 +550,18 @@ const main = async () => {
     .description("display match history for a player")
     .argument("<toon>", "Player toon")
     .argument("<gateway>", "Gateway id")
-    .addOption(new Option("-l, --limit <number>", "limit the number of results").default(10))
+    .addOption(
+      new Option("-l, --limit <number>", "limit the number of results").default(
+        10
+      )
+    )
     .action(async (toon, gateway, limit) => {
-      await matchHistory(gb, toon, parseInt(gateway) as GatewayId, Number.parseInt(limit.limit));
+      await matchHistory(
+        gb,
+        toon,
+        parseInt(gateway) as GatewayId,
+        Number.parseInt(limit.limit)
+      );
     });
 
   program
