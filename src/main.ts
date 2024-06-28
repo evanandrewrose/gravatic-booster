@@ -323,7 +323,9 @@ export class GravaticBooster {
 
     if (!account) {
       throw new EntityNotFoundError(
-        `No such account could be found with properties ${toon} and ${gateway}`
+        `No such account could be found with properties ${toon} and ${JSON.stringify(
+          gateway
+        )}`
       );
     }
 
