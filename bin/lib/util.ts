@@ -22,12 +22,16 @@ export const formatReplayName = (date: Date | null, match: Match) => {
   const p1Race = p1.race.toLowerCase();
   const p2Race = p2.race.toLowerCase();
 
-  return (
+  const replayUnsafe =
     `${formatDate(date)}_` +
     `${p1.toon}(${p1Race})` +
     "_vs_" +
-    `${p2.toon}(${p2Race}).rep`
-  );
+    `${p2.toon}(${p2Race}).rep`;
+
+  // convert replay name to a safe filename (alphanumeric, underscores, parens, and dash are fine)
+  const replaySafe = replayUnsafe.replace(/[^a-zA-Z0-9_().-]/g, "_");
+
+  return replaySafe;
 };
 
 export const createDirectoryUnlessExists = async (path: string) => {
