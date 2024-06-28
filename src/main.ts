@@ -1,6 +1,3 @@
-import { SCApiWithCaching } from "@/api/SCApiWithCaching";
-import { ContextualWindowsOrWSLClientProvider } from "@/api/client/provider";
-import { ResilientBroodWarConnection } from "@/api/connection/ResilientBroodWarConnection";
 import { EntityNotFoundError } from "@/errors";
 import {
   FullAccount,
@@ -41,7 +38,7 @@ import { profileMapStatsFromResponse } from "@/transformers/profileMapStats";
 import { rankingsFromLeaderboardEntity } from "@/transformers/rankings";
 import { replaysFromBwApiResponse } from "@/transformers/replay";
 import { GravaticBoosterLogger } from "@/utils/logger";
-import { BroodWarConnection, ISCApi, SCApi } from "bw-web-api";
+import { ISCApi } from "bw-web-api";
 import { PlayerSearchResult } from "./models/playerSearchResult";
 import { playerSearchResultFromBwApiResponse } from "./transformers/playerSearchResult";
 
@@ -66,19 +63,8 @@ export type GatewayLookupProps =
 export class GravaticBooster {
   private constructor(private api: ISCApi) {}
 
-  static async create(api?: ISCApi): Promise<GravaticBooster> {
-    return new GravaticBooster(
-      api ??
-        new SCApiWithCaching(
-          new SCApi(
-            new ResilientBroodWarConnection(
-              new BroodWarConnection(
-                await new ContextualWindowsOrWSLClientProvider().provide()
-              )
-            )
-          )
-        )
-    );
+  static async create(api: ISCApi): Promise<GravaticBooster> {
+    return new GravaticBooster(api);
   }
 
   /**

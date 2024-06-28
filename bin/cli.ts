@@ -1,9 +1,6 @@
 #!/usr/bin/env ts-node
 import { EntityNotFoundError } from "@/errors";
-import {
-  ContextualWindowsOrWSLClientProvider,
-  SCApiWithCaching,
-} from "@/index";
+import { SCApiWithCaching } from "@/index";
 import {
   createDirectoryUnlessExists,
   downloadIntoDirectory,
@@ -14,6 +11,7 @@ import { GravaticBooster } from "@/main";
 import { GatewayId, GlobalGatewayId } from "@/models/gateway";
 import { GravaticBoosterLogger, LogLevels } from "@/utils/logger";
 import { BroodWarConnection, SCApi } from "bw-web-api";
+import { ContextualWindowsOrWSLClientProvider } from "scr-api-node-providers";
 import progress from "cli-progress";
 import { Option, program } from "commander";
 import path from "path";
@@ -468,15 +466,12 @@ const matchHistory = async (
 
 const main = async () => {
   program.name("gravatic-booster").version("0.0.1");
+  const server = await new ContextualWindowsOrWSLClientProvider(
+    57421
+  ).provide();
 
   const gb = await GravaticBooster.create(
-    new SCApiWithCaching(
-      new SCApi(
-        new BroodWarConnection(
-          await new ContextualWindowsOrWSLClientProvider(57421).provide()
-        )
-      )
-    )
+    new SCApiWithCaching(new SCApi(new BroodWarConnection(server)))
   );
 
   program.addOption(
