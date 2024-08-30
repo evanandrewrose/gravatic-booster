@@ -13,6 +13,7 @@ export * from "@/models/leaderboard";
 export * from "@/models/map";
 export * from "@/models/matchHistory";
 export * from "@/models/profileMapStats";
+export * from "@/models/playerSearchResult";
 export * from "@/models/ranking";
 export * from "@/models/replays";
 export * from "@/utils/logger";
